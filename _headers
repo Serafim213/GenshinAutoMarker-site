@@ -1,0 +1,27 @@
+/*
+  Content-Security-Policy: default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'self' https://gam-counter.serafim-genshin.workers.dev; manifest-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'; object-src 'none'; upgrade-insecure-requests
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: no-referrer
+  Strict-Transport-Security: max-age=31536000
+  Cross-Origin-Opener-Policy: same-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+/img/*
+  Cache-Control: public, max-age=604800
+/version.json
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=300
+/changelog.json
+  Cache-Control: public, max-age=300
+
+/app/manifest.json
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=60
+/app/manifest.prev.json
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=60
+/app/blobs/*
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=31536000, immutable

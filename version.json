@@ -1,0 +1,9 @@
+{
+  "version": "0.9.82-beta-test",
+  "sha256": "dcc1925f7d727223b1147056ea80f9f42b974951ccdb4a91d2033531f57203d2",
+  "url": "https://genshin-auto-marker.serafim-genshin.workers.dev/#install",
+  "notes": "Подземелья 7.2 на своих этажах, данные сайта подхватываются в тот же день, окно «Обновиться?», баннер 7.2 Митя и Фурина",
+  "virustotal": "",
+  "manifest": "app/manifest.json",
+  "sig": "I7XvAhw9+Q9GWtU8gPrbeiFxOTtjwQygNmQ+w9Omo0zERiDCnpNvTMhPe384bJTtPaCZ5p8ZmU87cCj3pdFlCA=="
+}

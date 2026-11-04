@@ -1,0 +1,498 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Genshin Auto Marker — автоотметки на карте Genshin Impact</title>
+<meta name="description" content="Программа смотрит на экран Genshin Impact и ставит отметки найденных сундуков, окулусов и ресурсов на карте: на сайте appsample и в самой программе.">
+<meta name="theme-color" content="#6F5CF2">
+<meta property="og:title" content="Genshin Auto Marker">
+<meta property="og:description" content="Ставит отметки найденных сундуков, окулусов и ресурсов на карте Genshin Impact, пока вы играете.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://genshin-auto-marker.serafim-genshin.workers.dev/">
+<meta property="og:image" content="https://genshin-auto-marker.serafim-genshin.workers.dev/img/og.jpg?v=1022">
+<link rel="canonical" href="https://genshin-auto-marker.serafim-genshin.workers.dev/">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preload" href="fonts/Nunito-Variable.ttf" as="font" type="font/ttf" crossorigin>
+<link rel="stylesheet" href="style.css">
+<script src="theme-init.js"></script>
+</head>
+<body>
+
+<svg class="sprite" width="0" height="0" aria-hidden="true">
+  <defs>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></symbol>
+    <symbol id="i-bug" viewBox="0 0 24 24"><path d="m8 2 1.88 1.88M14.12 3.88 16 2M9 7.13v-1a3 3 0 1 1 6 0v1"/><path d="M12 20c-3.3 0-6-2.7-6-6v-3a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v3c0 3.3-2.7 6-6 6"/><path d="M12 20v-9M6.53 9C4.6 8.8 3 7.1 3 5M6 13H2M3 21c0-2.1 1.7-3.9 3.8-4M20.97 5c0 2.1-1.6 3.8-3.5 4M22 13h-4M17.2 17c2.1.1 3.8 1.9 3.8 4"/></symbol>
+    <symbol id="i-terminal" viewBox="0 0 24 24"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></symbol>
+    <symbol id="i-logo" viewBox="0 0 64 64"><circle cx="32" cy="32" r="18" fill="none" stroke="currentColor" stroke-width="4"/><path d="M41 23 36.5 36.5 23 41l4.5-13.5z" fill="currentColor"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></symbol>
+    <symbol id="i-zap" viewBox="0 0 24 24"><path d="M13 2 3 14h9l-1 8 10-12h-9z"/></symbol>
+    <symbol id="i-nav" viewBox="0 0 24 24"><path d="m3 11 19-9-9 19-2-8z"/></symbol>
+    <symbol id="i-gem" viewBox="0 0 24 24"><path d="M6 3h12l4 6-10 13L2 9z"/><path d="m11 3-3 6 4 13 4-13-3-6"/><path d="M2 9h20"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+    <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></symbol>
+    <symbol id="i-msg" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 9h8"/><path d="M8 13h5"/></symbol>
+    <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></symbol>
+    <symbol id="i-trophy" viewBox="0 0 24 24"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-1.21 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98 1.21 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0z"/></symbol>
+    <symbol id="i-chart" viewBox="0 0 24 24"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></symbol>
+    <symbol id="i-palette" viewBox="0 0 24 24"><circle cx="13.5" cy="6.5" r=".6"/><circle cx="17.5" cy="10.5" r=".6"/><circle cx="8.5" cy="7.5" r=".6"/><circle cx="6.5" cy="12.5" r=".6"/><path d="M12 22a1 1 0 0 1 0-20 10 9 0 0 1 10 9 5 5 0 0 1-5 5h-2.25a1.75 1.75 0 0 0-1.4 2.8l.3.4a1.75 1.75 0 0 1-1.4 2.8z"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/></symbol>
+    <symbol id="i-list" viewBox="0 0 24 24"><path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/><path d="M13 6h8M13 12h8M13 18h8"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path d="M9.94 15.5A2 2 0 0 0 8.5 14.06l-6.14-1.58a.5.5 0 0 1 0-.96L8.5 9.94A2 2 0 0 0 9.94 8.5l1.58-6.14a.5.5 0 0 1 .96 0l1.58 6.14a2 2 0 0 0 1.44 1.44l6.14 1.58a.5.5 0 0 1 0 .96l-6.14 1.58a2 2 0 0 0-1.44 1.44l-1.58 6.14a.5.5 0 0 1-.96 0z"/></symbol>
+    <symbol id="i-image" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.09-3.09a2 2 0 0 0-2.82 0L6 21"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+    <symbol id="i-chev-l" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
+    <symbol id="i-chev-r" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+    <symbol id="i-vol" viewBox="0 0 24 24"><path d="M11 4.7a.7.7 0 0 0-1.2-.5L6.4 7.6A1.4 1.4 0 0 1 5.4 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.4a1.4 1.4 0 0 1 1 .4l3.4 3.4a.7.7 0 0 0 1.2-.5z"/><path d="M16 9a5 5 0 0 1 0 6"/><path d="M19.4 18.4a9 9 0 0 0 0-12.8"/></symbol>
+    <symbol id="i-vol-off" viewBox="0 0 24 24"><path d="M11 4.7a.7.7 0 0 0-1.2-.5L6.4 7.6A1.4 1.4 0 0 1 5.4 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.4a1.4 1.4 0 0 1 1 .4l3.4 3.4a.7.7 0 0 0 1.2-.5z"/><path d="m22 9-6 6M16 9l6 6"/></symbol>
+    <symbol id="i-file" viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="m9 15 2 2 4-4"/></symbol>
+    <symbol id="i-telegram" viewBox="0 0 24 24"><path fill="currentColor" stroke="none" d="M21.9 3.3c-.3-.3-.8-.3-1.2-.2L2.7 10.1c-.9.4-.9 1.5 0 1.8l4.4 1.5 1.7 5.4c.2.6.9.8 1.4.4l2.5-2.3 4.6 3.4c.6.4 1.4.1 1.5-.6l3.4-14c.1-.4 0-.8-.3-1zM9.6 14.1l-.4 3.5-1.3-4.2 10.4-6.8z"/></symbol>
+    <symbol id="i-discord" viewBox="0 0 24 24"><path fill="currentColor" stroke="none" d="M20.32 4.37a19.8 19.8 0 0 0-4.89-1.52.07.07 0 0 0-.08.04c-.21.38-.44.87-.61 1.25a18.27 18.27 0 0 0-5.49 0 12.64 12.64 0 0 0-.62-1.25.08.08 0 0 0-.08-.04 19.74 19.74 0 0 0-4.88 1.52.07.07 0 0 0-.03.03C.53 9.05-.32 13.58.1 18.06a.08.08 0 0 0 .03.06 19.9 19.9 0 0 0 5.99 3.03.08.08 0 0 0 .08-.03c.47-.63.88-1.3 1.23-1.99a.08.08 0 0 0-.04-.11 13.1 13.1 0 0 1-1.87-.89.08.08 0 0 1 0-.13l.37-.29a.07.07 0 0 1 .08-.01c3.93 1.79 8.18 1.79 12.06 0a.07.07 0 0 1 .08.01l.37.29a.08.08 0 0 1 0 .13 12.3 12.3 0 0 1-1.87.89.08.08 0 0 0-.04.11c.36.7.77 1.36 1.22 1.99a.08.08 0 0 0 .09.03 19.84 19.84 0 0 0 6-3.03.08.08 0 0 0 .03-.06c.5-5.18-.84-9.67-3.55-13.66a.06.06 0 0 0-.03-.03zM8.02 15.33c-1.18 0-2.16-1.09-2.16-2.42s.96-2.42 2.16-2.42c1.21 0 2.18 1.1 2.16 2.42 0 1.33-.96 2.42-2.16 2.42zm7.97 0c-1.18 0-2.15-1.09-2.15-2.42s.95-2.42 2.15-2.42c1.21 0 2.18 1.1 2.16 2.42 0 1.33-.95 2.42-2.16 2.42z"/></symbol>
+  </defs>
+</svg>
+
+<div class="util">
+  <div class="wrap">
+    <a class="bug-pill pill-dc" data-link="discord" href="#top" aria-label="Дискорд" data-en-aria="Discord"><svg class="i" aria-hidden="true"><use href="#i-discord"/></svg><span data-en="Discord">Дискорд</span></a>
+    <a class="bug-pill pill-tg" data-link="telegram" data-hide-empty href="#top" aria-label="Телеграм" data-en-aria="Telegram"><svg class="i" aria-hidden="true"><use href="#i-telegram"/></svg><span data-en="Telegram">Телеграм</span></a>
+    <a class="bug-pill" data-link="bug" data-hide-empty href="#top" target="_blank" rel="noopener noreferrer"><svg class="i" aria-hidden="true"><use href="#i-bug"/></svg><span data-en="Report a bug">Сообщить об ошибке</span></a>
+  </div>
+</div>
+
+<header class="top">
+  <div class="wrap">
+    <div class="top-inner">
+      <a class="brand" href="#top" aria-label="Genshin Auto Marker">
+        <span class="logo"><svg aria-hidden="true"><use href="#i-logo"/></svg></span>
+        <span>Genshin Auto Marker</span>
+      </a>
+      <a class="like-btn" data-link="donate" data-hide-empty href="#top" aria-label="Поддержать автора" data-en-aria="Support the author">
+        <span class="like-ico"><svg class="i" aria-hidden="true"><use href="#i-heart"/></svg></span>
+        <span class="like-txt"><small data-en="Like the program?">Нравится программа?</small><b data-en="Support the author">Поддержать автора</b></span>
+      </a>
+      <nav class="nav" aria-label="Разделы" data-en-aria="Sections">
+        <a href="#safe" data-en="Safety">Безопасность</a>
+        <a href="#features" data-en="Features">Возможности</a>
+        <a href="#gallery" data-en="Screenshots">Снимки</a>
+        <a href="#install" data-en="Install">Установка</a>
+      </nav>
+      <div class="tools">
+        <button class="chip theme-btn" id="theme-btn" type="button" aria-label="Тема" data-en-aria="Theme">
+          <svg class="i moon" aria-hidden="true"><use href="#i-moon"/></svg><svg class="i sun" aria-hidden="true"><use href="#i-sun"/></svg>
+        </button>
+        <button class="chip sound-btn" id="sound-btn" type="button" aria-pressed="true" aria-label="Звук нажатий" data-en-aria="Click sound"
+          title="Звук нажатий: включить или выключить" data-en-title="Click sound: on or off">
+          <svg class="i on" aria-hidden="true"><use href="#i-vol"/></svg><svg class="i off" aria-hidden="true"><use href="#i-vol-off"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+  <div class="hero">
+    <div class="wrap">
+      <div class="hero-card">
+        <div class="hero-text">
+          <div class="hero-logo"><svg aria-hidden="true"><use href="#i-logo"/></svg></div>
+          <h1>Genshin Auto Marker</h1>
+          <p class="lead" data-en="You open chests and pick up oculi, the program notices it and puts the marks on the map: on the appsample site and in its own Map tab. No more alt-tabbing to click.">Открываете сундуки, подбираете окулусы, а программа замечает это и ставит отметки на карте: на сайте appsample и во вкладке «Карта» внутри самой программы. Сворачивать игру и кликать вручную не нужно.</p>
+          <div class="cta">
+            <a class="btn btn-white" data-link="download" href="#install"><svg class="i" aria-hidden="true"><use href="#i-download"/></svg><span data-en="Download">Скачать</span><span class="soon-tag" data-en="soon">скоро</span></a>
+            <a class="zip-link" data-link="zip" data-hide-empty href="#install" data-en="Download zip">Скачать zip</a>
+          </div>
+          <ul class="hero-meta">
+            <li><span data-en="Version">Версия</span> <b class="js-ver">0.9.34-test</b></li>
+            <li id="size-li" hidden><span data-en="Installer">Установщик</span> <b id="size"></b></li>
+            <li id="app-size-li" hidden><span data-en="Program installed">Программа после установки</span> <b id="app-size"></b></li>
+            <li>Windows 10/11</li>
+            <li id="count-li" hidden><span data-en="Downloads">Скачиваний</span> <b id="count"></b></li>
+          </ul>
+        </div>
+        <div class="hero-shot">
+          <div class="frame">
+            <img class="img-light" src="img/home-light.webp?v=1022" width="1000" height="917" alt="Главный экран программы" data-en-alt="Main screen of the program">
+            <img class="img-dark" src="img/home-dark.webp?v=1022" width="1000" height="917" alt="Главный экран программы, тёмная тема" data-en-alt="Main screen of the program, dark theme">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section id="how">
+    <div class="wrap">
+      <div class="card how">
+        <div class="how-text">
+          <h2 data-en="How it works">Как это работает</h2>
+          <ol class="steps">
+            <li><div><b data-en="You play as usual">Вы играете как обычно</b><span data-en="The program only looks at the screen, the way a screen recorder does. It never presses anything for you.">Программа только смотрит на экран, как запись видео. Ничего за вас не нажимает.</span></div></li>
+            <li><div><b data-en="It notices the find">Замечает находку</b><span data-en="An opened chest or a picked-up oculus, and where you are by the minimap.">Открытый сундук или подобранный окулус — и где вы находитесь по миникарте.</span></div></li>
+            <li><div><b data-en="The mark appears on the map">Отметка появляется на карте</b><span data-en="In your appsample account and in the program's own map. If it is not sure, the find waits in the Journal until you confirm it.">В вашем аккаунте appsample и на карте внутри программы. Если программа не уверена, находка ждёт в «Журнале», пока вы её подтвердите.</span></div></li>
+          </ol>
+        </div>
+        <figure class="how-map">
+          <svg id="demo-map" viewBox="0 0 520 340" role="img" aria-label="Схема: стрелка игрока идёт по карте, и находки на пути сами получают отметки" data-en-aria="Diagram: the player arrow walks across the map and the finds along the way get marked by themselves">
+            <defs>
+              <symbol id="d-chest" viewBox="-12 -12 24 24"><rect x="-10" y="-4" width="20" height="13" rx="3" class="d-chest-body"/><path d="M-10-3a10 7 0 0 1 20 0z" class="d-chest-lid"/><rect x="-2.5" y="-3" width="5" height="6" rx="1.5" class="d-chest-lock"/></symbol>
+              <symbol id="d-oculus" viewBox="-12 -12 24 24"><circle r="11" class="d-oculus-glow"/><path d="M0-9 6 0 0 9-6 0z" class="d-oculus"/></symbol>
+            </defs>
+            <rect width="520" height="340" class="m-water"/>
+            <path class="m-land" d="M40 300C20 220 60 150 120 120c50-25 70-70 140-75 80-5 120 35 170 25 60-10 80 60 65 120-15 60 5 110-55 130-80 25-140-10-210 0-80 12-170 20-190-20z"/>
+            <path class="m-hill" d="M150 200c20-40 80-50 110-30s20 70-20 80c-40 12-100-10-90-50z"/>
+            <path class="m-hill" d="M330 110c30-20 90-15 110 15 15 25-10 50-45 47-40-2-80-32-65-62z"/>
+            <path class="m-river" d="M250 46c5 44 50 74 50 114s30 70 20 162"/>
+            <path class="m-route" d="M80 290c30-40 40-70 85-75 50-5 60 53 115 47 55-6 50-72 80-82 40-14 70 25 95-30"/>
+            <path class="m-trail" pathLength="1" d="M80 290c30-40 40-70 85-75 50-5 60 53 115 47 55-6 50-72 80-82 40-14 70 25 95-30">
+              <animate attributeName="stroke-dashoffset" values="1;0;0" keyTimes="0;.75;1" dur="10s" repeatCount="indefinite"/>
+            </path>
+
+            <g transform="translate(143 198)">
+              <use href="#d-chest" x="-13" y="-13" width="26" height="26"><animate attributeName="opacity" values="1;1;.4;.4;1;1" keyTimes="0;.15;.17;.92;.97;1" dur="10s" repeatCount="indefinite"/></use>
+              <g class="d-mark" opacity="0"><circle r="9" cx="10" cy="-10"/><path d="m6-10 3 3 5-6"/>
+                <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;.15;.17;.92;.97;1" dur="10s" repeatCount="indefinite"/></g>
+            </g>
+            <g transform="translate(282 238)">
+              <use href="#d-oculus" x="-13" y="-13" width="26" height="26"><animate attributeName="opacity" values="1;1;.4;.4;1;1" keyTimes="0;.39;.41;.92;.97;1" dur="10s" repeatCount="indefinite"/></use>
+              <g class="d-mark" opacity="0"><circle r="9" cx="10" cy="-10"/><path d="m6-10 3 3 5-6"/>
+                <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;.39;.41;.92;.97;1" dur="10s" repeatCount="indefinite"/></g>
+            </g>
+            <g transform="translate(402 157)">
+              <use href="#d-chest" x="-15" y="-15" width="30" height="30" class="d-rich"><animate attributeName="opacity" values="1;1;.4;.4;1;1" keyTimes="0;.645;.665;.92;.97;1" dur="10s" repeatCount="indefinite"/></use>
+              <g class="d-mark" opacity="0"><circle r="9" cx="11" cy="-11"/><path d="m7-11 3 3 5-6"/>
+                <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;.645;.665;.92;.97;1" dur="10s" repeatCount="indefinite"/></g>
+            </g>
+
+            <g class="d-player">
+              <circle r="13" class="d-player-ring"/>
+              <path d="M9 0-6 7-3 0-6-7z" class="d-player-arrow"/>
+              <animateMotion dur="10s" repeatCount="indefinite" rotate="auto" keyPoints="0;1;1" keyTimes="0;.75;1" calcMode="linear" path="M80 290c30-40 40-70 85-75 50-5 60 53 115 47 55-6 50-72 80-82 40-14 70 25 95-30"/>
+            </g>
+
+            <g class="d-toast" opacity="0" transform="translate(18 18)"><rect width="262" height="42" rx="21"/><circle cx="21" cy="21" r="13" class="d-toast-ico"/><path d="m15 21 4 4 8-8" class="d-toast-check"/><text x="44" y="26" data-en="Common chest marked">Обычный сундук отмечен</text>
+              <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;.15;.17;.3;.33;1" dur="10s" repeatCount="indefinite"/></g>
+            <g class="d-toast" opacity="0" transform="translate(18 18)"><rect width="196" height="42" rx="21"/><circle cx="21" cy="21" r="13" class="d-toast-ico"/><path d="m15 21 4 4 8-8" class="d-toast-check"/><text x="44" y="26" data-en="Oculus marked">Окулус отмечен</text>
+              <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;.39;.41;.54;.57;1" dur="10s" repeatCount="indefinite"/></g>
+            <g class="d-toast" opacity="0" transform="translate(18 18)"><rect width="296" height="42" rx="21"/><circle cx="21" cy="21" r="13" class="d-toast-ico"/><path d="m15 21 4 4 8-8" class="d-toast-check"/><text x="44" y="26" data-en="Precious chest marked">Драгоценный сундук отмечен</text>
+              <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;.645;.665;.8;.83;1" dur="10s" repeatCount="indefinite"/></g>
+          </svg>
+          <figcaption data-en="A simplified diagram, not a screen recording.">Упрощённая схема, а не запись экрана.</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section id="safe">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div class="sec-ico t-mint"><svg class="i" aria-hidden="true"><use href="#i-shield"/></svg></div>
+        <div>
+          <h2 data-en="Safety and trust">Безопасность и доверие</h2>
+          <p class="sec-sub" data-en="What the program does and what it never does.">Что программа делает и чего не делает никогда.</p>
+        </div>
+      </div>
+      <div class="grid trust-grid">
+        <div class="card trust tr-mint reveal">
+          <div class="tile t-mint"><svg class="i" aria-hidden="true"><use href="#i-shield"/></svg></div>
+          <h3 data-en="Only looks at the screen">Только смотрит на экран</h3>
+          <p data-en="It takes a picture of the screen and reads it, like a screen recorder. It does not press keys, does not touch the game's memory, does not change the game's files and puts nothing into the game.">Берёт картинку с экрана и читает её, как программа для записи видео. Клавиши не нажимает, память игры не трогает, файлы игры не меняет, в игру ничего не встраивает.</p>
+        </div>
+        <div class="card trust tr-sky reveal">
+          <div class="tile t-sky"><svg class="i" aria-hidden="true"><use href="#i-shield"/></svg></div>
+          <h3 data-en="Your password stays with Google">Пароль остаётся у Google</h3>
+          <p data-en="You sign in to Google in a regular browser window, on the map site. The program never sees or stores your password.">Вход в Google выполняется в обычном окне браузера, на сайте карты. Пароль программа не видит и не хранит.</p>
+        </div>
+        <div class="card trust tr-lilac reveal">
+          <div class="tile t-lilac"><svg class="i" aria-hidden="true"><use href="#i-shield"/></svg></div>
+          <h3 data-en="Your data stays with you">Данные только у вас</h3>
+          <p data-en="Settings, journal and statistics stay on your computer. Nothing goes to the developer unless you send an error report yourself. The program goes online to the appsample map (marks and map data) and this site (new versions), and takes reference data from the wiki and Genshin fan sites (banners, characters, dialogues). Only if you use these features: HoYoverse servers (wish import), the HoYoLAB map and Telegram (notifications).">Настройки, журнал и статистика хранятся на вашем компьютере. Автору ничего не уходит, пока вы сами не пришлёте отчёт об ошибке. В интернет программа выходит на карту appsample (отметки и данные карты) и на этот сайт (новая версия), а справочные данные берёт с вики и сайтов о Genshin (баннеры, герои, диалоги). Только если вы пользуетесь этими функциями: серверы HoYoverse (импорт круток), карта HoYoLAB и Telegram (уведомления).</p>
+        </div>
+        <div class="card trust tr-peach reveal">
+          <div class="tile t-peach"><svg class="i" aria-hidden="true"><use href="#i-shield"/></svg></div>
+          <h3 data-en="Free, no ads">Бесплатно, без рекламы</h3>
+          <p data-en="Nothing to pay for and nothing to watch.">Платить не за что, рекламы нет.</p>
+        </div>
+      </div>
+
+      <div class="card verify reveal" id="verify" hidden>
+        <div class="verify-head">
+          <div class="tile t-mint"><svg class="i" aria-hidden="true"><use href="#i-file"/></svg></div>
+          <div>
+            <h3 data-en="Check that the file is genuine">Проверка целостности файла</h3>
+            <p data-en="Every file has a &quot;fingerprint&quot;, a checksum called SHA256. Change even one byte and the fingerprint becomes completely different. If the fingerprint of your download matches the one below, it is exactly the file the author published, not damaged or swapped on the way.">У каждого файла есть «отпечаток» — контрольная сумма SHA256. Стоит изменить в файле хоть один байт, и отпечаток станет совсем другим. Если отпечаток скачанного установщика совпал с указанным ниже — это тот самый файл, который выложил автор: его не повредили и не подменили по дороге.</p>
+          </div>
+        </div>
+        <div class="hash-row">
+          <span class="hash-label">SHA256</span>
+          <code class="hash" id="sha"></code>
+          <button class="copy-btn" type="button" data-copy="sha" aria-label="Скопировать SHA256" data-en-aria="Copy SHA256"><svg class="i" aria-hidden="true"><use href="#i-copy"/></svg><span data-en="Copy">Копировать</span></button>
+        </div>
+        <div class="check" id="check" hidden>
+          <button class="btn btn-primary btn-sm" type="button" id="check-btn"><svg class="i" aria-hidden="true"><use href="#i-file"/></svg><span data-en="Check the downloaded file">Проверить скачанный файл</span></button>
+          <input type="file" id="check-file" accept=".exe" tabindex="-1" aria-hidden="true" hidden>
+          <p class="check-note" data-en="The file stays on your computer: the browser computes the fingerprint itself and compares it.">Файл никуда не отправляется: браузер сам посчитает отпечаток и сравнит.</p>
+          <p class="check-res" id="check-res" role="status" aria-live="polite" hidden></p>
+        </div>
+        <details class="howto">
+          <summary data-en="How to do it">Как это сделать</summary>
+          <div class="howto-body">
+            <div class="js-only" hidden>
+              <h4 data-en="The easy way: right here">Проще всего — прямо здесь</h4>
+              <ol class="verify-steps">
+                <li data-en="Download the installer with the &lt;b&gt;Download&lt;/b&gt; button at the top of the page.">Скачайте установщик кнопкой <b>«Скачать»</b> вверху страницы.</li>
+                <li data-en="Click &lt;b&gt;Check the downloaded file&lt;/b&gt; above and pick &lt;b&gt;GenshinAutoMarker-Setup.exe&lt;/b&gt; in the &lt;b&gt;Downloads&lt;/b&gt; folder.">Нажмите выше <b>«Проверить скачанный файл»</b> и выберите <b>GenshinAutoMarker-Setup.exe</b> в папке <b>«Загрузки»</b>.</li>
+                <li data-en="In a second you get the answer. A green tick means the file is genuine and you can install it.">Через секунду появится ответ. Зелёная галочка — файл настоящий, можно устанавливать.</li>
+              </ol>
+            </div>
+            <h4 data-en="With Windows tools">Средствами Windows</h4>
+            <ol class="verify-steps">
+              <li data-en="Press &lt;b&gt;Win + E&lt;/b&gt; and open the &lt;b&gt;Downloads&lt;/b&gt; folder on the left.">Нажмите <b>Win + E</b> и слева откройте папку <b>«Загрузки»</b>.</li>
+              <li data-en="Click the address bar at the top of the window (where the folder path is), type &lt;b&gt;cmd&lt;/b&gt; and press &lt;b&gt;Enter&lt;/b&gt;. A black command window opens, already in the Downloads folder.">Щёлкните по адресной строке вверху окна (там, где написан путь к папке), напечатайте <b>cmd</b> и нажмите <b>Enter</b>. Откроется чёрное окно командной строки — сразу в папке «Загрузки».</li>
+              <li><span data-en="Copy this command, right-click inside the black window to paste it, and press &lt;b&gt;Enter&lt;/b&gt;:">Скопируйте эту команду, щёлкните правой кнопкой мыши в чёрном окне — она вставится — и нажмите <b>Enter</b>:</span>
+                <span class="hash-row cmd-row"><svg class="i" aria-hidden="true"><use href="#i-terminal"/></svg><code id="cmd">certutil -hashfile GenshinAutoMarker-Setup.exe SHA256</code><button class="copy-btn" type="button" data-copy="cmd" aria-label="Скопировать команду" data-en-aria="Copy the command"><svg class="i" aria-hidden="true"><use href="#i-copy"/></svg><span data-en="Copy">Копировать</span></button></span>
+              </li>
+              <li data-en="The window prints a line of 64 letters and digits. Compare it with the checksum above: checking the first and last 6 characters is enough. Letter case does not matter.">В окне появится строка из 64 букв и цифр. Сравните её с суммой выше — достаточно сверить первые и последние 6 символов. Большие или маленькие буквы — неважно.</li>
+            </ol>
+            <p class="howto-tip" data-en="If the browser saved the file under another name, for example &lt;b&gt;GenshinAutoMarker-Setup (1).exe&lt;/b&gt;, put that name in the command in quotes: &lt;code&gt;certutil -hashfile &quot;GenshinAutoMarker-Setup (1).exe&quot; SHA256&lt;/code&gt;">Если браузер сохранил файл под другим именем, например <b>GenshinAutoMarker-Setup (1).exe</b>, впишите в команду это имя в кавычках: <code>certutil -hashfile "GenshinAutoMarker-Setup (1).exe" SHA256</code></p>
+            <p class="howto-tip howto-warn" data-en="&lt;b&gt;Does not match?&lt;/b&gt; Do not run the file. Delete it and download it again from this page. If it still does not match, let the author know.">
+              <b>Не совпало?</b> Не запускайте файл. Удалите его и скачайте заново с этой страницы. Если снова не совпадёт — сообщите автору.</p>
+          </div>
+        </details>
+      </div>
+
+      <h3 class="faq-title reveal" data-en="Questions people ask">Частые вопросы</h3>
+      <div class="faq">
+        <details class="card faq-item reveal tr-lilac">
+          <summary data-en="Can I get banned?">Могут ли забанить?</summary>
+          <p data-en="The program does not change the game and does not play for you. Still, it is third-party software and nobody can promise it fits HoYoverse's rules, so it is your call.">Программа не меняет игру и ничего не делает в ней за вас. Но она сторонняя, и обещать, что она подходит под правила HoYoverse, никто не может. Решать вам.</p>
+        </details>
+        <details class="card faq-item reveal tr-sky">
+          <summary data-en="Why does Windows (SmartScreen) warn me?">Почему Windows (SmartScreen) предупреждает?</summary>
+          <p data-en="SmartScreen may warn about an unknown publisher: click More info, then Run anyway. To be honest, the program is not digitally signed yet; a signature is planned. The installer itself checks the Ed25519 signature of the file list and the SHA256 of every file it downloads.">SmartScreen может предупредить о неизвестном издателе: «Подробнее» → «Выполнить в любом случае». Честно: у программы пока нет цифровой подписи, её планируется получить. Сам установщик проверяет подпись Ed25519 списка файлов и SHA256 каждого скачанного файла.</p>
+        </details>
+        <details class="card faq-item reveal tr-mint">
+          <summary data-en="My antivirus complains. What now?">Антивирус ругается — что делать?</summary>
+          <p data-en="Same reason: the program is unsigned, and antiviruses distrust new unsigned files. Compare the SHA256 checksum (see &lt;a href=&quot;#verify&quot;&gt;Check that the file is genuine&lt;/a&gt;); if it matches, the file is exactly the one the author published.">Причина та же: программа без цифровой подписи, а антивирусы не доверяют новым неподписанным файлам. Сверьте контрольную сумму SHA256 (см. <a href="#verify">Проверка целостности файла</a>) — если она совпала, файл тот самый, который выложил автор.</p>
+        </details>
+        <details class="card faq-item reveal tr-peach" id="vt-item" hidden>
+          <summary data-en="Is the installer checked on VirusTotal?">Установщик проверен на VirusTotal?</summary>
+          <p><span data-en="Check on VirusTotal:">Проверка на VirusTotal:</span> <a id="vt-link" href="#" target="_blank" rel="noopener noreferrer">VirusTotal</a></p>
+        </details>
+        <details class="card faq-item reveal tr-pink">
+          <summary data-en="How do I uninstall it?">Как удалить?</summary>
+          <p data-en="Close the program and delete its folder and the shortcuts. Nothing is added to startup. Nice shots are in Pictures\Genshin Auto Marker, delete that folder too if you don't need them.">Закройте программу и удалите её папку и ярлыки. В автозагрузку программа себя не добавляет. Красивые кадры лежат в «Изображения\Genshin Auto Marker», эту папку тоже можно удалить.</p>
+        </details>
+      </div>
+
+      <div class="note reveal">
+        <p data-en="This is an Open test (beta), so bugs are possible. The Report a bug button in the program window header collects an archive with logs; send it to the author.">Это Открытый тест (beta), возможны ошибки. Кнопка «Сообщить об ошибке» в шапке окна программы соберёт архив с журналами — пришлите его автору.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="features">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div class="sec-ico"><svg class="i" aria-hidden="true"><use href="#i-spark"/></svg></div>
+        <div><h2 data-en="What the program does">Что умеет программа</h2></div>
+      </div>
+      <div class="grid features">
+        <article class="card feature reveal tr-peach">
+          <div class="tile t-peach"><svg class="i" aria-hidden="true"><use href="#i-zap"/></svg></div>
+          <h3 data-en="Auto-marking">Автоотметки</h3>
+          <p data-en="Open a chest or grab an oculus and the mark appears by itself, on the site and in the program's map at the same time. Unsure finds go to the Journal, and any mark can be undone. F8 marks what is nearby by hand.">Открыли сундук или взяли окулус, и отметка появляется сама: и на сайте, и на карте в программе. Что вызывает сомнения, попадает в «Журнал», любую отметку можно отменить. F8 отмечает вручную то, что рядом.</p>
+        </article>
+        <article class="card feature reveal tr-sky">
+          <div class="tile t-sky"><svg class="i" aria-hidden="true"><use href="#i-nav"/></svg></div>
+          <h3 data-en="Compass navigator and route">Компас и маршрут</h3>
+          <p data-en="An arrow over the game points to the nearest unmarked find. Targets are picked once and are the same on the World tab and on the map. There are many compass styles and a route for the area.">Стрелка поверх игры показывает на ближайшую неотмеченную находку. Цели выбираются один раз и одинаковы во вкладках «Мир» и «Карта». Видов компаса много, есть и маршрут обхода области.</p>
+        </article>
+        <article class="card feature reveal tr-mint">
+          <div class="tile t-mint"><svg class="i" aria-hidden="true"><use href="#i-gem"/></svg></div>
+          <h3 data-en="Respawning resources">Ресурсы, которые возрождаются</h3>
+          <p data-en="Local specialties, ingredients, ore: 131 kinds. Choose what you need, the arrow leads to the nearest, and what you picked stays marked until it respawns.">Местные особенности, ингредиенты, руда: 131 вид. Выбираете нужное, стрелка ведёт к ближайшему, собранное остаётся отмеченным до возрождения.</p>
+        </article>
+        <article class="card feature reveal tr-lilac">
+          <div class="tile t-lilac"><svg class="i" aria-hidden="true"><use href="#i-users"/></svg></div>
+          <h3 data-en="Characters and leveling">Персонажи и прокачка</h3>
+          <p data-en="Every hero with a portrait, search and filters. For each: materials, bosses, talent books, domain days, best weapons, artifacts and teams. The Collect button picks the needed resources on the map.">Все герои с портретами, поиском и фильтрами. У каждого материалы, боссы, книги талантов, дни подземелий, лучшее оружие, артефакты и отряды. Кнопка «Собирать» выбирает нужные ресурсы на карте.</p>
+        </article>
+        <article class="card feature reveal tr-butter">
+          <div class="tile t-butter"><svg class="i" aria-hidden="true"><use href="#i-bulb"/></svg></div>
+          <h3 data-en="Puzzle hints">Подсказки к загадкам</h3>
+          <p data-en="One hotkey and players' tips from the site appear at the bottom of the screen. Useful ones come first, jokes are hidden, and you can hide any tip.">Одна горячая клавиша, и внизу экрана появляются советы игроков с сайта. Полезные идут первыми, шуточные спрятаны, любой совет можно скрыть.</p>
+        </article>
+        <article class="card feature reveal tr-pink">
+          <div class="tile t-pink"><svg class="i" aria-hidden="true"><use href="#i-msg"/></svg></div>
+          <h3 data-en="Dialogue journal">Журнал диалогов</h3>
+          <p data-en="Reads dialogues from the screen, finds the quest on the wiki and keeps a short summary plus the full text, so you can reread it later.">Читает диалоги с экрана, находит задание на вики и сохраняет краткий пересказ и полный текст, чтобы можно было перечитать.</p>
+        </article>
+        <article class="card feature reveal tr-mint">
+          <div class="tile t-mint"><svg class="i" aria-hidden="true"><use href="#i-target"/></svg></div>
+          <h3 data-en="Goals and achievements">Цели и достижения</h3>
+          <p data-en="Your own goals and ready-made ones, with progress rings. Starred goals show over the game. Achievements are given for first finds and big milestones.">Свои цели и готовые, с кольцами прогресса. Цели со звёздочкой видны поверх игры. Достижения дают за первые находки и большие рубежи.</p>
+        </article>
+        <article class="card feature reveal tr-sky">
+          <div class="tile t-sky"><svg class="i" aria-hidden="true"><use href="#i-chart"/></svg></div>
+          <h3 data-en="Statistics">Статистика</h3>
+          <p data-en="How much you marked today, this session and in total, play time, distance, area clearing pace and a forecast of when it will be done. Nice shots get saved while you play.">Сколько отмечено за сегодня, за сессию и всего, время в игре, пройденный путь, темп зачистки области и прогноз, когда она закончится. Красивые кадры сохраняются по ходу игры.</p>
+        </article>
+        <article class="card feature reveal tr-lilac">
+          <div class="tile t-lilac"><svg class="i" aria-hidden="true"><use href="#i-palette"/></svg></div>
+          <h3 data-en="Themes and quiet mode">Темы и тихий режим</h3>
+          <p data-en="Light and dark themes, many interface styles, your own accent color and text size. Quiet mode hides everything over the game while marks keep being placed.">Светлая и тёмная темы, много стилей интерфейса, свой цвет акцента и размер текста. «Тихий режим» убирает всё поверх игры, а отметки продолжают ставиться.</p>
+        </article>
+
+        <article class="card feature reveal tr-sky">
+          <div class="tile t-sky"><svg class="i" aria-hidden="true"><use href="#i-nav"/></svg></div>
+          <h3 data-en="Map inside the program">Карта внутри программы</h3>
+          <p data-en="Teyvat and the other permanent locations with chests, oculi, puzzles, ore and curios. It follows you around the game, can be downloaded for offline use, and marks can be moved between the site and the program. A browser is not required.">Тейват и остальные постоянные локации с сундуками, окулусами, загадками, рудами и диковинками. Следует за вами по игре, скачивается для работы без интернета, отметки можно переносить между сайтом и программой. Браузер не нужен.</p>
+        </article>
+        <article class="card feature reveal tr-peach">
+          <div class="tile t-peach"><svg class="i" aria-hidden="true"><use href="#i-spark"/></svg></div>
+          <h3 data-en="Banners, wishes, weapons, artifacts">Баннеры, крутки, оружие, артефакты</h3>
+          <p data-en="Current and upcoming banners with a countdown, your wish history with pity and 50/50 (kept only on your PC), where to get weapon materials and artifacts.">Текущие и будущие баннеры с таймером, история ваших круток с гарантом и 50/50 (хранится только у вас), где добыть материалы оружия и артефакты.</p>
+        </article>
+        <article class="card feature reveal tr-pink">
+          <div class="tile t-pink"><svg class="i" aria-hidden="true"><use href="#i-trophy"/></svg></div>
+          <h3 data-en="Spiral Abyss">Витая Бездна</h3>
+          <p data-en="Floors 1 to 12, enemies by waves, ley line disorders and team picks: the best ones and budget ones.">Этажи с 1 по 12, враги по волнам, нарушения лей-линий и подбор отрядов: лучшие и бюджетные.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="gallery">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div class="sec-ico t-sky"><svg class="i" aria-hidden="true"><use href="#i-image"/></svg></div>
+        <div>
+          <h2 data-en="What it looks like">Как это выглядит</h2>
+          <p class="sec-sub" data-en="Screenshots of the current version on test data. Click to enlarge, arrows switch between them.">Снимки текущей версии на тестовых данных. Нажмите, чтобы увеличить, — стрелками можно листать.</p>
+        </div>
+      </div>
+      <div class="grid gallery">
+        <button class="card shot reveal" type="button" data-full="img/world.webp?v=1022"><div class="pic"><img loading="lazy" src="img/world.webp?v=1022" width="1000" height="917" alt="Вкладка «Мир»" data-en-alt="The World tab"></div><div class="cap"><span data-en="World">Мир</span><small data-en="Ready-made sets: chests, oculi, puzzles">Готовые наборы: сундуки, окулусы, загадки</small></div></button>
+        <button class="card shot reveal" type="button" data-full="img/characters.webp?v=1022"><div class="pic"><img loading="lazy" src="img/characters.webp?v=1022" width="1000" height="917" alt="Вкладка «Персонажи»" data-en-alt="The Characters tab"></div><div class="cap"><span data-en="Characters">Персонажи</span><small data-en="Search, filters and everything for leveling">Поиск, фильтры и всё для прокачки</small></div></button>
+        <button class="card shot reveal" type="button" data-full="img/banners.webp?v=1022"><div class="pic"><img loading="lazy" src="img/banners.webp?v=1022" width="1000" height="917" alt="Вкладка «Баннеры»" data-en-alt="The Banners tab"></div><div class="cap"><span data-en="Banners">Баннеры</span><small data-en="What is running now, history and what is coming">Что идёт сейчас, история и что ожидается</small></div></button>
+        <button class="card shot reveal" type="button" data-full="img/stats.webp?v=1022"><div class="pic"><img loading="lazy" src="img/stats.webp?v=1022" width="1000" height="917" alt="Статистика" data-en-alt="Statistics"></div><div class="cap"><span data-en="Statistics">Статистика</span><small data-en="Pace, distance, time and area clearing">Темп, путь, время и зачистка областей</small></div></button>
+        <button class="card shot reveal" type="button" data-full="img/achievements.webp?v=1022"><div class="pic"><img loading="lazy" src="img/achievements.webp?v=1022" width="1000" height="917" alt="Достижения" data-en-alt="Achievements"></div><div class="cap"><span data-en="Achievements">Достижения</span><small data-en="Badge collection and recent awards">Коллекция значков и последние награды</small></div></button>
+        <button class="card shot reveal" type="button" data-full="img/goals.webp?v=1022"><div class="pic"><img loading="lazy" src="img/goals.webp?v=1022" width="1000" height="917" alt="Цели" data-en-alt="Goals"></div><div class="cap"><span data-en="Goals">Цели</span><small data-en="Progress rings and your own numbers">Кольца прогресса и ваши цели</small></div></button>
+        <button class="card shot reveal" type="button" data-full="img/journal.webp?v=1022"><div class="pic"><img loading="lazy" src="img/journal.webp?v=1022" width="1000" height="917" alt="Журнал отметок" data-en-alt="The marks journal"></div><div class="cap"><span data-en="Journal">Журнал</span><small data-en="What is marked, what awaits confirmation">Что отмечено, что ждёт подтверждения</small></div></button>
+        <button class="card shot reveal" type="button" data-full="img/functions.webp?v=1022"><div class="pic"><img loading="lazy" src="img/functions.webp?v=1022" width="1000" height="917" alt="Вкладка «Функции»" data-en-alt="The Features tab"></div><div class="cap"><span data-en="Features">Функции</span><small data-en="Beautiful shots, journal, goals">Красивые кадры, журнал, цели</small></div></button>
+        <button class="card shot reveal" type="button" data-full="img/controls.webp?v=1022"><div class="pic"><img loading="lazy" src="img/controls.webp?v=1022" width="1000" height="917" alt="Управление" data-en-alt="Controls"></div><div class="cap"><span data-en="Controls">Управление</span><small data-en="Hotkeys you can easily change">Горячие клавиши, которые легко поменять</small></div></button>
+        <button class="card shot reveal" type="button" data-full="img/settings.webp?v=1022"><div class="pic"><img loading="lazy" src="img/settings.webp?v=1022" width="1000" height="917" alt="Настройки" data-en-alt="Settings"></div><div class="cap"><span data-en="Settings">Настройки</span><small data-en="Compass, themes, colors and fonts">Компас, темы, цвета и шрифты</small></div></button>
+        <button class="card shot reveal" type="button" data-full="img/home-dark.webp?v=1022"><div class="pic"><img loading="lazy" src="img/home-dark.webp?v=1022" width="1000" height="917" alt="Главная в тёмной теме" data-en-alt="Home in the dark theme"></div><div class="cap"><span data-en="Dark theme">Тёмная тема</span><small data-en="And 13 more themes to choose from">И ещё 13 тем на выбор</small></div></button>
+      </div>
+    </div>
+  </section>
+
+  <section id="install">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div class="sec-ico t-peach"><svg class="i" aria-hidden="true"><use href="#i-download"/></svg></div>
+        <div><h2 data-en="Requirements and installation">Требования и установка</h2></div>
+      </div>
+      <div class="grid two">
+        <div class="card reveal">
+          <h3 data-en="What you need">Что понадобится</h3>
+          <ul class="list">
+            <li data-en="Windows 10 or 11, 64-bit.">Windows 10 или 11, 64-разрядная.</li>
+            <li data-en="Google Chrome or Microsoft Edge (Edge is already in Windows). Not needed if you use the map built into the program.">Google Chrome или Microsoft Edge (Edge в Windows уже есть). Если пользуетесь картой внутри программы, браузер не нужен.</li>
+            <li data-en="The game set to Russian.">Игра на русском языке.</li>
+            <li data-en="Game display mode Windowed or Borderless (fullscreen in a window).">Режим экрана в игре — «В окне» или «Без рамки».</li>
+            <li data-en="The minimap is oriented north (the default in the game).">Миникарта повёрнута на север (в игре так по умолчанию).</li>
+            <li data-en="About 1 GB of free disk space.">Около 1 ГБ свободного места на диске.</li>
+            <li data-en="8 GB of RAM at least; 16 GB is better together with the game.">Оперативной памяти не меньше 8 ГБ, а вместе с игрой лучше 16 ГБ.</li>
+          </ul>
+        </div>
+        <div class="card reveal">
+          <h3 data-en="How to install">Как установить</h3>
+          <ol class="steps">
+            <li><div><b data-en="Download the installer">Скачайте установщик</b><span data-en="The Download button at the top of the page: the small GenshinAutoMarker-Setup.exe file.">Кнопка «Скачать» вверху страницы — небольшой файл GenshinAutoMarker-Setup.exe.</span></div></li>
+            <li><div><b data-en="Run it and pick a folder">Запустите и выберите папку</b><span data-en="Windows may show a SmartScreen warning: click More info, then Run anyway. The installer downloads the program (about 175 MB; about 320 MB once unpacked), checks its signature and checksums, and creates shortcuts on the Desktop and in the Start menu.">Windows может показать предупреждение SmartScreen: «Подробнее» → «Выполнить в любом случае». Установщик скачает программу (около 175 МБ, после распаковки — около 320 МБ), проверит подпись и контрольные суммы и создаст ярлыки на Рабочем столе и в меню «Пуск».</span></div></li>
+            <li><div><b data-en="Run the program">Запустите программу</b><span data-en="Windows will ask for administrator rights; they are needed for hotkeys in the game. The program also works without them, except for the hotkeys.">Windows попросит права администратора — они нужны для горячих клавиш в игре. Без них программа работает, но горячие клавиши недоступны.</span></div></li>
+          </ol>
+        </div>
+      </div>
+      <div class="card load-card reveal" id="load">
+        <h3 data-en="Load on the computer">Нагрузка на компьютер</h3>
+        <p data-load="intro" data-en="Measured on version 0.9.82-beta on a PC with a Ryzen 5 5600XT (6 cores), 16 GB of RAM and an RTX 4060: the processor by running recorded game frames through recognition (8 frames per second) plus the program&#x27;s background work, the memory of the running program and of the browser window with the map site. The measurement is updated with every version. On weaker PCs the processor percentage will be higher.">Замер на версии 0.9.82-beta, ПК с Ryzen 5 5600XT (6 ядер), 16 ГБ ОЗУ и RTX 4060: процессор — прогон записанных кадров игры через распознавание (8 кадров в секунду) плюс фоновая работа программы, память — у запущенной программы и окна браузера с сайтом карты. Замер обновляется с каждой версией. На более слабом компьютере процент загрузки процессора будет выше.</p>
+        <div class="grid load">
+          <div class="load-item tr-peach">
+            <b data-en="Processor">Процессор</b>
+            <span class="load-num" data-load="cpu_num" data-en="5–15 %">5–15 %</span>
+            <small data-load="cpu_text" data-en="Of the whole processor. Usually about 5 %, at the heaviest moments (a busy picture, searching for a lost position) up to 15 %; when the position is lost the program checks the screen less often by itself.">От всего процессора. Обычно ≈ 5 %, в самые тяжёлые моменты (сложная картинка, поиск потерянной позиции) — до 15 %; когда позиция потеряна, программа сама реже проверяет экран.</small>
+          </div>
+          <div class="load-item tr-lilac">
+            <b data-en="RAM">Оперативная память</b>
+            <span class="load-num" data-load="ram_num" data-en="≈ 1.1 GB">≈ 1,1 ГБ</span>
+            <small data-load="ram_text" data-en="In total: the program with its window ≈ 850 MB and the browser window with the map site ≈ 280 MB, as shown in Task Manager.">Всего: программа вместе с окном ≈ 850 МБ и окно браузера с сайтом карты ≈ 280 МБ, как в «Диспетчере задач».</small>
+          </div>
+          <div class="load-item tr-sky">
+            <b data-en="Disk">Диск</b>
+            <span class="load-num" data-load="disk_num" data-en="≈ 360 MB">≈ 360 МБ</span>
+            <small data-load="disk_text" data-en="Right after installation. Over time the cache of the browser with the map site and the maps of the Map tab (downloaded in the background by themselves) are added.">Сразу после установки. Со временем добавляются кэш браузера с сайтом карты и карты вкладки «Карта» (скачиваются сами в фоне).</small>
+          </div>
+          <div class="load-item tr-mint">
+            <b data-en="Graphics card">Видеокарта</b>
+            <span class="load-num" data-load="gpu_num" data-en="almost none">почти нет</span>
+            <small data-load="gpu_text" data-en="Recognition runs on the processor; the graphics card is only used to grab the screen image, like recording software does.">Распознавание идёт на процессоре, видеокарта нужна лишь для снятия картинки с экрана, как у программ записи видео.</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="news">
+    <div class="wrap">
+      <div class="card news reveal">
+        <span class="pill"><svg class="i" aria-hidden="true"><use href="#i-spark"/></svg><span data-en="What's new in">Что нового в</span> <span id="ver2">0.9.34-test</span></span>
+        <ul class="list news-list" id="news-list">
+          <li data-en="Hero tips are more precise and complete">Подсказки по героям стали точнее и полнее</li>
+          <li data-en="Teams for more characters">Отряды для ещё нескольких персонажей</li>
+          <li data-en="Small improvements and fixes">Мелкие улучшения и исправления</li>
+        </ul>
+        <details class="history" id="history" hidden>
+          <summary data-en="Version history">История версий</summary>
+          <div id="history-list"></div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot reveal">
+      <div class="foot-links">
+        <a href="#top" data-en="Back to top">Наверх</a>
+        <a data-link="bug" data-hide-empty href="#top" data-en="Report a bug">Сообщить об ошибке</a>
+      </div>
+      <p data-en="© Serafim, 2026. All rights reserved. Free for personal, non-commercial use; modifying, decompiling or selling the program is not allowed (see Settings → About). Not affiliated with HoYoverse; Genshin Impact is a trademark of HoYoverse.">© Serafim, 2026. Все права защищены. Бесплатно для личного некоммерческого использования; изменять, декомпилировать и продавать программу нельзя (текст — «Настройки → О программе»). Программа не связана с HoYoverse; Genshin Impact — товарный знак HoYoverse.</p>
+      <p data-en="Marks are placed on the interactive map of the appsample site, which is a separate service. Quest texts for the dialogue journal come from ru.genshin-impact.fandom.com (CC BY-SA).">Отметки ставятся на интерактивной карте сайта appsample — это отдельный сервис. Тексты заданий для журнала диалогов берутся с ru.genshin-impact.fandom.com (CC BY-SA).</p>
+    </div>
+  </div>
+</footer>
+
+<dialog id="lightbox" aria-label="Снимок" data-en-aria="Screenshot">
+  <div class="frame">
+    <button class="close" type="button" id="lb-close" aria-label="Закрыть" data-en-aria="Close"><svg class="i" aria-hidden="true"><use href="#i-x"/></svg></button>
+    <div class="lb-stage">
+      <img id="lb-img" alt="">
+      <button class="lb-nav lb-prev" type="button" id="lb-prev" aria-label="Предыдущий снимок" data-en-aria="Previous screenshot"><svg class="i" aria-hidden="true"><use href="#i-chev-l"/></svg></button>
+      <button class="lb-nav lb-next" type="button" id="lb-next" aria-label="Следующий снимок" data-en-aria="Next screenshot"><svg class="i" aria-hidden="true"><use href="#i-chev-r"/></svg></button>
+    </div>
+    <div class="lb-bar"><span id="lb-cap"></span><small id="lb-count"></small></div>
+  </div>
+</dialog>
+
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
