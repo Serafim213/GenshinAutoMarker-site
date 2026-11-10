@@ -1,0 +1,9 @@
+{
+  "version": "0.9.94-beta-test",
+  "sha256": "9098027fddeccd52169ab464846958b15f9d6194f4f24ba34657e47a29db1ec2",
+  "url": "https://genshin-auto-marker.serafim-genshin.workers.dev/#install",
+  "notes": "Первая настройка стала одной — все шаги подряд; язык программы переключается в шапке рядом с «Сообщить об ошибке»",
+  "virustotal": "",
+  "manifest": "app/manifest.json",
+  "sig": "yBNz6hkPuW9byJUxr/Z9o/hg10pk21A8W1nveDS/Y1a3WkLpFkA7ih1VGeP1CuqIP2yT/NDHzzbSYD/lPrUGBw=="
+}
