@@ -587,6 +587,116 @@ details[open] > :not(summary) { animation: unfold .38s cubic-bezier(.2, .8, .2, 
 .pay-opt small { display: block; margin-top: 2px; color: var(--text-2); font-size: 14px; line-height: 1.35; }
 .pay-opt.soon { opacity: .5; pointer-events: none; }
 .pay-ico { flex: none; width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; }
+.pay-boosty { background: var(--tint-peach); color: var(--ink-peach); }
+.pay-dx { background: var(--tint-pink); color: var(--ink-pink); }
+.pay-ico svg { width: 22px; height: 22px; }
 .pay-note { margin: 6px 2px 0; color: var(--muted); font-size: 13px; }
 
 @media (max-width: 560px) { .load { grid-template-columns: 1fr; } }
+
+/* ---------- отзывы (раздел виден, только если Worker отзывов ответил) */
+.rv-sum { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 24px; margin-bottom: 16px; }
+.rv-score { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; }
+.rv-score b { font-size: 44px; font-weight: 800; line-height: 1; letter-spacing: -.02em; }
+.rv-score small { color: var(--muted); font-size: 15px; font-weight: 700; }
+.rv-stars { display: inline-flex; gap: 2px; color: color-mix(in srgb, var(--muted) 45%, transparent); }
+.rv-stars .i { fill: currentColor; stroke: none; }
+.rv-stars .i.on { color: var(--ink-butter); }
+.rv-score .rv-stars .i { width: 24px; height: 24px; }
+.rv-list { grid-template-columns: repeat(3, 1fr); align-items: start; }
+/* 2026-11-16: только карточки списка — у <html> тоже есть класс «rv» (анимация появления), и прежние .rv / .rv p
+   давали отступ всей странице и меняли все абзацы */
+.rv-list > .rv { padding: 18px 20px; }
+.rv-head { display: flex; align-items: center; gap: 12px; }
+.rv-ava { flex: none; width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; font-size: 17px; color: #fff; }
+.rv-ava.t0 { background: linear-gradient(135deg, #8C7CFF, #5A48DC); }
+.rv-ava.t1 { background: linear-gradient(135deg, #FF8FB8, #E4558C); }
+.rv-ava.t2 { background: linear-gradient(135deg, #5FD3A6, #23A57A); }
+.rv-ava.t3 { background: linear-gradient(135deg, #FFC46B, #F08A3C); }
+.rv-ava.t4 { background: linear-gradient(135deg, #6CC4FF, #3A8BE0); }
+.rv-ava.t5 { background: linear-gradient(135deg, #C08CFF, #8A4FE0); }
+.rv-who { display: grid; min-width: 0; flex: 1; line-height: 1.25; }
+.rv-who b { font-size: 16px; font-weight: 800; overflow-wrap: anywhere; }
+.rv-who small { color: var(--muted); font-size: 13px; font-weight: 600; }
+.rv-head .rv-stars .i { width: 15px; height: 15px; }
+.rv-list > .rv p { margin-top: 10px; font-size: 15px; line-height: 1.5; white-space: pre-line; overflow-wrap: anywhere; color: var(--text); }
+
+/* отзывы — цитаты (вид «Б», выбран автором 2026-11-16): текст первым, крупная кавычка, автор внизу; без карточек, тонкие разделители */
+.rv-b .rv-list { gap: 0; }
+.rv-b .rv-list > .rv { display: flex; flex-direction: column-reverse; background: none; box-shadow: none; border-radius: 0; padding: 18px 4px;
+  border-bottom: 1px solid color-mix(in srgb, var(--primary) 14%, transparent); }
+.rv-b .rv-list > .rv p { position: relative; margin: 0 0 12px; padding-left: 30px; font-size: 15.5px; }
+.rv-b .rv-list > .rv p::before { content: "\201C"; position: absolute; left: 0; top: -10px; font-size: 44px; font-weight: 800; line-height: 1; color: var(--primary); opacity: .55; }
+.rv-b .rv-ava { width: 32px; height: 32px; font-size: 14px; }
+.rv-b .rv-sum { color: #fff; background: linear-gradient(135deg, var(--primary), #4FA8F5); box-shadow: 0 14px 34px color-mix(in srgb, var(--primary) 30%, transparent); }
+.rv-b .rv-sum .rv-score small { color: rgba(255, 255, 255, .85); }
+.rv-b .rv-sum .rv-stars .i.on { color: #FFE27A; }
+.rv-b .rv-sum .rv-stars { color: rgba(255, 255, 255, .35); }
+.rv-b .rv-sum .btn-primary { background: #fff; color: #5A48DC; box-shadow: none; }
+
+.rv-empty { color: var(--text-2); font-weight: 600; text-align: center; padding: 8px 0 4px; }
+.rv-more { display: flex; margin: 18px auto 0; }
+@media (max-width: 900px) { .rv-list { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 640px) { .rv-list { grid-template-columns: 1fr; } .rv-sum .btn { width: 100%; } }
+/* форма отзыва без Telegram */
+.rv-form-wrap { margin-top: 18px; padding: 0; }
+.rv-form-wrap > summary { cursor: pointer; padding: 18px 24px; font-weight: 800; font-size: 16.5px; color: var(--primary-deep); list-style: none; }
+.rv-form-wrap > summary::-webkit-details-marker { display: none; }
+.rv-form-wrap > summary::after { content: " +"; }
+.rv-form-wrap[open] > summary::after { content: " −"; }
+.rv-form { display: grid; gap: 14px; padding: 0 24px 22px; max-width: 640px; }
+.rv-form label { display: grid; gap: 6px; font-weight: 700; font-size: 14.5px; color: var(--text-2); }
+.rv-form input, .rv-form textarea { font: inherit; font-weight: 600; color: var(--text); background: var(--card-soft); border: 1.5px solid transparent;
+  border-radius: var(--r-in); padding: 11px 14px; width: 100%; resize: vertical; }
+.rv-form input:focus, .rv-form textarea:focus { outline: none; border-color: var(--primary); box-shadow: var(--focus); }
+.rv-pick { display: flex; gap: 4px; }
+.rv-pick button { background: none; border: 0; padding: 4px; cursor: pointer; color: color-mix(in srgb, var(--muted) 45%, transparent); border-radius: 10px; }
+.rv-pick button .i { width: 34px; height: 34px; fill: currentColor; stroke: none; transition: transform .15s; }
+.rv-pick button.on { color: var(--ink-butter); }
+.rv-pick button:hover .i { transform: scale(1.12); }
+.rv-pick button:focus-visible { outline: none; box-shadow: var(--focus); }
+.rv-form .btn { justify-self: start; }
+.rv-form .btn:disabled { opacity: .6; cursor: default; transform: none; }
+.rv-msg { font-weight: 700; font-size: 15px; min-height: 1.2em; }
+.rv-msg.is-ok { color: var(--ok); }
+.rv-msg.is-bad { color: var(--bad); }
+.rv-form.done :is(.rv-pick, label, #rv-captcha, .btn) { display: none; }
+.rv-form > *, .rv-form label, .rv-form input, .rv-form textarea { min-width: 0; }
+.rv-pick { flex-wrap: wrap; }
+@media (max-width: 400px) { .rv-form { padding: 0 16px 18px; } .rv-form-wrap > summary { padding: 16px; } .rv-pick button .i { width: 30px; height: 30px; } }
+
+/* ---------- отзывы панелью справа на широком экране (во всю высоту окна, не прокручивается вместе со страницей) */
+@media (min-width: 1240px) {
+  .rv-on body { padding-right: 380px; }
+  .rv-on #reviews { position: fixed; top: 0; right: 0; bottom: 0; width: 380px; z-index: 30; margin: 0; padding: 18px 0 24px;
+    overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin;
+    background: color-mix(in srgb, var(--card) 72%, transparent); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+    border-left: 1px solid color-mix(in srgb, var(--primary) 16%, transparent); box-shadow: -10px 0 40px rgba(40, 30, 110, .10); }
+  .rv-on #reviews .wrap { padding: 0 18px; max-width: none; }
+  .rv-on #reviews .sec-head { margin-bottom: 16px; }
+  .rv-on #reviews h2 { font-size: 26px; }
+  .rv-on #reviews .sec-sub { font-size: 14px; }
+  .rv-on #reviews .rv-sum { flex-direction: column; align-items: stretch; padding: 18px; }
+  .rv-on #reviews .rv-sum .btn { width: 100%; height: 46px; }
+  .rv-on #reviews .rv-list { grid-template-columns: 1fr; gap: 12px; }
+  .rv-on #reviews .rv-form { padding: 0 18px 18px; }
+  .rv-on #reviews .rv-form-wrap > summary { padding: 16px 18px; }
+  .rv-on #reviews .reveal { opacity: 1; translate: none; }
+  .rv-on .nav a[href="#reviews"] { display: none; }
+}
+@media (min-width: 1240px) { .rv-on #reviews .sec-ico { scale: none; rotate: none; } }
+/* 2026-11-16: с панелью отзывов (380 px) шапке остаётся ширина окна минус 380 — те же сжатия, что у узкого окна
+   (961–1100 / 961–1030 выше), сдвинутые на 380 px; иначе название обрезалось до «Genshin Auto …» */
+@media (min-width: 1240px) and (max-width: 1480px) {
+  .rv-on .like-txt small { display: none; }
+  .rv-on .nav a { padding: 8px 9px; font-size: 14.5px; }
+}
+@media (min-width: 1240px) and (max-width: 1410px) {
+  .rv-on .like-btn { padding: 0 4px; }
+  .rv-on .like-txt { display: none; }
+}
+@media (min-width: 1240px) and (max-width: 1320px) {
+  .rv-on .nav a { padding: 8px 7px; font-size: 14px; }
+  .rv-on .brand { font-size: 16.5px; gap: 8px; }
+  .rv-on .top-inner { gap: 6px; }
+}

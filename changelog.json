@@ -2,6 +2,152 @@
   "_help": "История версий для сайта. Новую версию добавляйте В НАЧАЛО списка releases. version пустая = заголовок из title_ru / title_en. Текст только обычный, без HTML.",
   "releases": [
     {
+      "version": "0.107-beta-test",
+      "ru": [
+        "«Память феи» теперь называется «Испытания и феи» и так же отмечает испытания на время и испытания воина",
+        "клавиша «Отметить испытание или фею» — одна для обоих, назначенная клавиша сохраняется"
+      ],
+      "en": [
+        "Seelie memory is now called Trials and Seelies and marks time trials and Warrior's Challenges the same way",
+        "the Mark trial or Seelie key works for both, an already assigned key is kept"
+      ]
+    },
+    {
+      "version": "0.106-beta-test",
+      "ru": [
+        "Баннеры: картинки новых героев подтягиваются сами — квадратная иконка, как в игре, и сразу, без перезапуска программы"
+      ],
+      "en": [
+        "Banners: pictures of new characters now load automatically — a square icon like in the game, right away, without restarting the app"
+      ]
+    },
+    {
+      "version": "0.105-beta-test",
+      "ru": [
+        "Сундуки снова отмечаются сами, если язык программы и игры разные",
+        "советы к меткам — сначала на вашем языке",
+        "памятка на главной, если компас не находит позицию",
+        "компас быстрее находит позицию после телепорта на слабых ПК",
+        "из 0.104: советы с карты HoYoLAB, фея по запасной позиции, кучи и ящики с морой надёжнее"
+      ],
+      "en": [
+        "Chests are marked automatically again when the program and game languages differ",
+        "marker tips come in your language first",
+        "a Home note when the compass can't find the position",
+        "the compass finds the position faster after a teleport on slow PCs",
+        "from 0.104: tips from the HoYoLAB map, Seelies with a fallback position, Mora piles and crates marked more reliably"
+      ]
+    },
+    {
+      "version": "0.103-beta-test",
+      "ru": [
+        "После удачной игры на главной может появиться небольшая плашка «Оставить отзыв» со звёздами — не чаще раза в месяц, её можно закрыть",
+        "Отзыв теперь можно оставить и без Telegram — формой на сайте"
+      ],
+      "en": [
+        "After a good session a small «Leave a review» card with stars may appear on Home — at most once a month, and it can be closed",
+        "You can now leave a review without Telegram too, using the form on the site"
+      ]
+    },
+    {
+      "version": "0.102-beta-test",
+      "ru": [
+        "Кнопка «Оставить отзыв» в шапке программы — оценка и пара слов в нашем Telegram-боте, после проверки отзыв появится на сайте",
+        "Через неделю программа один раз спросит, как она вам (можно отложить или выключить во «Функциях»)"
+      ],
+      "en": [
+        "A «Leave a review» button in the header: rate the app and leave a few words in our Telegram bot, the review appears on the site after a check",
+        "A week after the first launch the app asks once how you like it (you can postpone it or turn it off in Features)"
+      ]
+    },
+    {
+      "version": "0.101-beta-test",
+      "ru": [
+        "Фея, которую вы вели, отмечается сама по сундуку у её двора — возвращаться к началу не нужно",
+        "то же с испытаниями на время (карточка «Память феи» во «Функциях»)",
+        "Новая клавиша «Отметить последнюю загадку» в «Управлении», по умолчанию не назначена",
+        "Режим «Максимальный» меньше нагружает процессор при той же скорости отметок"
+      ],
+      "en": [
+        "The Seelie you led is now marked automatically by the chest at its court - no need to go back to the start",
+        "time trials work the same way (the Seelie memory card in Features)",
+        "New key Mark the last puzzle in Controls, not assigned by default",
+        "The Maximum mode loads the processor less at the same marking speed"
+      ]
+    },
+    {
+      "version": "0.100-beta-test",
+      "ru": [
+        "Картинка места и советы к загадкам открываются быстрее: программа загружает их заранее",
+        "Режим производительности теперь выбирает и режим памяти, отдельной настройки памяти больше нет",
+        "Кнопка «Переместить мышью» есть и в разделе «Компас», дальность клавиши отметки — и в разделе «Подсказки и картинки мест»"
+      ],
+      "en": [
+        "Place pictures and puzzle tips open faster: the program loads them in advance",
+        "The performance mode now also chooses the memory mode, the separate memory setting is gone",
+        "The Move with mouse button is also in the Compass section, the mark key distance is also in the Hints and place pictures section"
+      ]
+    },
+    {
+      "version": "0.9.99-beta-test",
+      "ru": [
+        "Режим памяти «Стандарт» занимает заметно меньше памяти и не стал медленнее",
+        "В «Сбалансированном» окно, пролежавшее в трее 10 минут, отдаёт память",
+        "Позиция на небольших картах находится быстрее",
+        "«Максимальный» меньше нагружает процессор при той же скорости"
+      ],
+      "en": [
+        "The Standard memory mode uses noticeably less memory and is no slower",
+        "In Balanced, a window left in the tray for 10 minutes frees its memory",
+        "The position on small maps is found faster",
+        "Maximum loads the processor less at the same speed"
+      ]
+    },
+    {
+      "version": "0.9.98-beta-test",
+      "ru": [
+        "Режим памяти в Настройках: программа занимает меньше оперативной памяти",
+        "средняя кнопка мыши для горячих клавиш",
+        "после смены языка на английский герои, оружие, Бездна, баннеры и журнал сразу на английском"
+      ],
+      "en": [
+        "Memory mode in Settings: the program uses less RAM",
+        "middle mouse button for hotkeys",
+        "after switching to English, heroes, weapons, Abyss, banners and the journal show in English right away"
+      ]
+    },
+    {
+      "version": "0.9.97-beta-test",
+      "ru": [
+        "Мелкие улучшения и исправления"
+      ],
+      "en": [
+        "Minor improvements and fixes"
+      ]
+    },
+    {
+      "version": "0.9.96-beta-test",
+      "ru": [
+        "Программа меньше нагружает компьютер, когда персонаж стоит на месте",
+        "Поиск потерянной позиции больше не притормаживает остальную работу программы"
+      ],
+      "en": [
+        "The program uses less of your computer while the character stands still",
+        "Searching for a lost position no longer slows down the rest of the program"
+      ]
+    },
+    {
+      "version": "0.9.95-beta-test",
+      "ru": [
+        "Язык программы и игры — в своём разделе Настроек «Язык»",
+        "главная полностью на выбранном языке: последние отметки и сообщения переводятся сразу после смены языка"
+      ],
+      "en": [
+        "Program and game language now have their own Settings section, \"Language\"",
+        "the Home screen is fully in the chosen language: recent marks and messages switch right after the language change"
+      ]
+    },
+    {
       "version": "0.9.94-beta-test",
       "ru": [
         "Первая настройка стала одной — все шаги подряд",

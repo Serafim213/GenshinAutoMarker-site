@@ -66,8 +66,10 @@
     zip: typeof ZIP_URL === "string" ? ZIP_URL.trim() : "",
     donate: typeof DONATE_URL === "string" ? DONATE_URL.trim() : "",
     donate_rub: typeof DONATE_RUB_URL === "string" ? DONATE_RUB_URL.trim() : "",
+    donatex: typeof DONATEX_URL === "string" ? DONATEX_URL.trim() : "",
     telegram: typeof TELEGRAM_URL === "string" ? TELEGRAM_URL.trim() : "",
-    discord: typeof DISCORD_URL === "string" ? DISCORD_URL.trim() : ""
+    discord: typeof DISCORD_URL === "string" ? DISCORD_URL.trim() : "",
+    review: typeof REVIEW_BOT_URL === "string" ? REVIEW_BOT_URL.trim() : ""
   };
   LINKS.bug = (typeof BUG_URL === "string" ? BUG_URL.trim() : "") || LINKS.telegram;
   $$("[data-link]").forEach(function (a) {
@@ -81,6 +83,14 @@
       a.addEventListener("click", function (e) { e.preventDefault(); });
     }
   });
+
+  /* ---------- «Поддержать»: окно выбора — Boosty или DonateX (2026-11-16); без окна/JS ссылка ведёт на Boosty */
+  var dnBtn = $("#donate-btn"), dnDlg = $("#donate-dlg");
+  if (dnBtn && dnDlg && dnDlg.showModal) {
+    dnBtn.addEventListener("click", function (e) { e.preventDefault(); dnDlg.showModal(); });
+    $("#dn-close").addEventListener("click", function () { dnDlg.close(); });
+    dnDlg.addEventListener("click", function (e) { if (e.target === dnDlg || e.target.closest(".pay-opt")) dnDlg.close(); });
+  }
 
   /* ---------- тема */
   var mq = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : null;
@@ -98,7 +108,7 @@
     en: { title: "Genshin Auto Marker — auto-marks on the Genshin Impact map",
           desc: "The program watches your Genshin Impact screen and automatically marks the chests, oculi and resources you find on the interactive appsample map." }
   };
-  var attrs = [["data-en-alt", "alt"], ["data-en-aria", "aria-label"], ["data-en-title", "title"]];
+  var attrs = [["data-en-alt", "alt"], ["data-en-aria", "aria-label"], ["data-en-title", "title"], ["data-en-placeholder", "placeholder"]];
   $$("[data-en]").forEach(function (el) { el.setAttribute("data-ru", el.innerHTML); });
   attrs.forEach(function (p) {
     $$("[" + p[0] + "]").forEach(function (el) { el.setAttribute(p[0].replace("en", "ru"), el.getAttribute(p[1]) || ""); });
@@ -282,6 +292,138 @@
         } catch (e) {}
       });
     });
+  }
+
+  /* ---------- отзывы: одобренные отзывы из своего Worker (tools\reviews-worker); не ответил = раздела нет */
+  var rvUrl = (typeof REVIEWS_URL === "string" ? REVIEWS_URL.trim() : "").replace(/\/+$/, "");
+  var rvData = null, rvShown = 6;
+  function rvStars(n) {
+    var s = "";
+    for (var i = 1; i <= 5; i++) s += '<svg class="i' + (i <= n ? " on" : "") + '" aria-hidden="true"><use href="#i-star"/></svg>';
+    return s;
+  }
+  function rvPlural(n, en) {
+    if (en) return n === 1 ? "review" : "reviews";
+    var a = n % 10, b = n % 100;
+    return a === 1 && b !== 11 ? "отзыв" : a >= 2 && a <= 4 && (b < 12 || b > 14) ? "отзыва" : "отзывов";
+  }
+  function renderReviews(en) {
+    if (!rvData) return;
+    var c = rvData.count, items = rvData.items;
+    $("#rv-avg").textContent = c ? rvData.avg.toLocaleString(en ? "en-US" : "ru-RU", { minimumFractionDigits: 1, maximumFractionDigits: 1 }) : "—";
+    $("#rv-avg-stars").innerHTML = rvStars(Math.round(rvData.avg));
+    $("#rv-count").textContent = c + " " + rvPlural(c, en);
+    $("#rv-empty").hidden = c > 0;
+    var list = $("#rv-list");
+    list.textContent = "";
+    items.slice(0, rvShown).forEach(function (r) {
+      var card = document.createElement("article");
+      card.className = "card rv";
+      var head = document.createElement("div");
+      head.className = "rv-head";
+      var ava = document.createElement("span");          /* 2026-11-16: кружок с первой буквой имени, цвет — по имени */
+      var h = 0;
+      for (var k = 0; k < r.name.length; k++) h = (h * 31 + r.name.charCodeAt(k)) >>> 0;
+      ava.className = "rv-ava t" + (h % 6);
+      ava.setAttribute("aria-hidden", "true");
+      ava.textContent = (r.name.trim().charAt(0) || "?").toUpperCase();
+      var whoBox = document.createElement("div");
+      whoBox.className = "rv-who";
+      var who = document.createElement("b");
+      who.textContent = r.name;
+      var st = document.createElement("span");
+      st.className = "rv-stars";
+      st.setAttribute("aria-label", r.stars + " / 5");
+      st.innerHTML = rvStars(r.stars);
+      var d = document.createElement("small");
+      var dt = new Date(r.date + "T12:00:00");
+      d.textContent = isNaN(dt) ? "" : dt.toLocaleDateString(en ? "en-US" : "ru-RU", { day: "numeric", month: "long", year: "numeric" });
+      whoBox.appendChild(who); whoBox.appendChild(d);
+      head.appendChild(ava); head.appendChild(whoBox); head.appendChild(st);
+      card.appendChild(head);
+      if (r.text) { var p = document.createElement("p"); p.textContent = r.text; card.appendChild(p); }
+      list.appendChild(card);
+    });
+    $("#rv-more").hidden = items.length <= rvShown;
+  }
+  root.classList.add("rv-b");   /* вид отзывов «цитаты» (style.css), выбран автором 2026-11-16 */
+  if (/^https:\/\/[^\s\/]+$/i.test(rvUrl) && window.fetch) {
+    fetch(rvUrl + "/reviews", { cache: "no-cache", credentials: "omit", referrerPolicy: "no-referrer" }).then(function (r) { return r.ok ? r.json() : null; }).then(function (j) {
+      if (!j || !Array.isArray(j.items) || typeof j.count !== "number") return;
+      rvData = {
+        count: Math.max(0, Math.floor(j.count)),
+        avg: Math.min(5, Math.max(0, Number(j.avg) || 0)),
+        items: j.items.filter(function (r) { return r && typeof r.name === "string" && r.stars >= 1 && r.stars <= 5; }).map(function (r) {
+          return { name: r.name.slice(0, 40), stars: Math.round(r.stars), text: typeof r.text === "string" ? r.text.slice(0, 1000) : "", date: String(r.date || "").slice(0, 10) };
+        })
+      };
+      $("#reviews").hidden = false;
+      root.classList.add("rv-on");   /* на широком экране раздел становится панелью справа (style.css) */
+      if (typeof TURNSTILE_SITEKEY === "string" && TURNSTILE_SITEKEY.trim()) $("#rv-form-wrap").hidden = false;
+      var nl = $('.nav a[href="#reviews"]'); if (nl) nl.hidden = false;
+      renderReviews(root.lang === "en");
+    }).catch(function () {});
+    $("#rv-more").addEventListener("click", function () { rvShown += 6; renderReviews(root.lang === "en"); });
+
+    /* форма для тех, у кого нет Telegram: отзыв уходит в очередь Worker'а, бот присылает его автору на проверку */
+    var tsKey = typeof TURNSTILE_SITEKEY === "string" ? TURNSTILE_SITEKEY.trim() : "";
+    var fw = $("#rv-form-wrap"), rvStar = 0, tsId = null, tsToken = "", sent = false;
+    var RVM = {
+      stars: ["Выберите оценку — от 1 до 5 звёзд.", "Pick a rating from 1 to 5 stars."],
+      captcha: ["Подождите проверку «я не робот» под формой.", "Wait for the \"not a robot\" check below the form."],
+      sending: ["Отправляю…", "Sending…"],
+      ok: ["Спасибо! Отзыв появится на сайте после проверки.", "Thank you! Your review will appear on the site after a check."],
+      rate: ["Слишком много отзывов с вашего адреса. Попробуйте через час.", "Too many reviews from your address. Please try again in an hour."],
+      err: ["Не получилось отправить. Попробуйте ещё раз или напишите нашему Telegram-боту.", "Could not send. Please try again or write to our Telegram bot."]
+    };
+    var rvMsgKey = "";
+    function rvMsg(k) { rvMsgKey = k; $("#rv-msg").textContent = k ? RVM[k][root.lang === "en" ? 1 : 0] : ""; $("#rv-msg").className = "rv-msg" + (k === "ok" ? " is-ok" : k && k !== "sending" ? " is-bad" : ""); }
+    langHooks.push(function () { if (rvMsgKey) rvMsg(rvMsgKey); });
+    function paintPick(n) { $$("#rv-pick button").forEach(function (b) { b.classList.toggle("on", Number(b.getAttribute("data-s")) <= n); b.setAttribute("aria-checked", String(Number(b.getAttribute("data-s")) === rvStar)); b.setAttribute("role", "radio"); }); }
+    $$("#rv-pick button").forEach(function (b) {
+      var n = Number(b.getAttribute("data-s"));
+      b.addEventListener("click", function () { rvStar = n; paintPick(n); if (rvMsgKey === "stars") rvMsg(""); });
+      b.addEventListener("mouseenter", function () { paintPick(n); });
+    });
+    $("#rv-pick").addEventListener("mouseleave", function () { paintPick(rvStar); });
+    paintPick(0);
+    function loadCaptcha() {
+      if (tsId !== null || !tsKey) return;
+      tsId = "loading";
+      window.gamTsReady = function () {
+        try {
+          tsId = window.turnstile.render("#rv-captcha", {
+            sitekey: tsKey, language: root.lang === "en" ? "en" : "ru", theme: "auto", size: "flexible",
+            callback: function (t) { tsToken = t; if (rvMsgKey === "captcha") rvMsg(""); },
+            "expired-callback": function () { tsToken = ""; }, "error-callback": function () { tsToken = ""; }
+          });
+        } catch (e) { tsId = null; }
+      };
+      var s = document.createElement("script");
+      s.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=gamTsReady";
+      s.async = true; s.defer = true;
+      document.head.appendChild(s);
+    }
+    if (tsKey) {
+      fw.addEventListener("toggle", function () { if (fw.open) loadCaptcha(); });
+      $("#rv-form").addEventListener("submit", function (e) {
+        e.preventDefault();
+        if (sent) return;
+        if (!rvStar) { rvMsg("stars"); return; }
+        if (!tsToken) { rvMsg("captcha"); return; }
+        var btn = $("#rv-send"); btn.disabled = true; rvMsg("sending");
+        fetch(rvUrl + "/submit", {
+          method: "POST", credentials: "omit", referrerPolicy: "no-referrer", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name: $("#rv-name").value.trim(), stars: rvStar, text: $("#rv-text").value.trim(), lang: root.lang === "en" ? "en" : "ru", token: tsToken })
+        }).then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { st: r.status, j: j }; }); }).then(function (res) {
+          if (res.j && res.j.ok) { sent = true; rvMsg("ok"); $("#rv-form").classList.add("done"); return; }
+          rvMsg(res.st === 429 ? "rate" : "err");
+          btn.disabled = false; tsToken = "";
+          try { if (window.turnstile && tsId !== null && tsId !== "loading") window.turnstile.reset(tsId); } catch (x) {}
+        }).catch(function () { rvMsg("err"); btn.disabled = false; });
+      });
+    }
+    langHooks.push(renderReviews);
   }
 
   /* ---------- текущий раздел в меню */

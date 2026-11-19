@@ -1,9 +1,9 @@
 {
-  "version": "0.9.94-beta-test",
-  "sha256": "9098027fddeccd52169ab464846958b15f9d6194f4f24ba34657e47a29db1ec2",
+  "version": "0.107-beta-test",
+  "sha256": "592dc26250e0de88914cecf3f920eaad751514ae7f0c370c625affa52321f072",
   "url": "https://genshin-auto-marker.serafim-genshin.workers.dev/#install",
-  "notes": "Первая настройка стала одной — все шаги подряд; язык программы переключается в шапке рядом с «Сообщить об ошибке»",
+  "notes": "«Память феи» теперь называется «Испытания и феи» и так же отмечает испытания на время и испытания воина; клавиша «Отметить испытание или фею» — одна для обоих, назначенная клавиша сохраняется",
   "virustotal": "",
   "manifest": "app/manifest.json",
-  "sig": "yBNz6hkPuW9byJUxr/Z9o/hg10pk21A8W1nveDS/Y1a3WkLpFkA7ih1VGeP1CuqIP2yT/NDHzzbSYD/lPrUGBw=="
+  "sig": "hsd2sqAMvCATzv2qOytHJ37YdNgvouF31nnnWWI5Omr0Rqk52y56gXWuwcFrzRh6ei+TUJ0rojDXSTIbM59gCw=="
 }
